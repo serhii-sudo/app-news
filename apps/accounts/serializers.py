@@ -90,12 +90,12 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         return instance
 
 
-class ChangePasswordSerializer(serializers.ModelSerializer):
+class ChangePasswordSerializer(serializers.Serializer):
     old_password = serializers.CharField(required=True)
     new_password = serializers.CharField(required=True, validators=[validate_password])
     new_password_confirm = serializers.CharField(required=True)
 
-    def validate_all_password(self, value):
+    def validate_old_password(self, value):
         user = self.context['request'].user
         if not user.check_password(value):
             raise serializers.ValidationError('Old password is incorrect')
