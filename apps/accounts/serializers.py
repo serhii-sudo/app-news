@@ -26,7 +26,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         return user
 
 
-class UserLoginSerializer(serializers.ModelSerializer):
+class UserLoginSerializer(serializers.Serializer):
     email = serializers.EmailField(write_only=True)
     password = serializers.CharField(write_only=True)
 
@@ -66,15 +66,24 @@ class UserProfileSerializer(serializers.ModelSerializer):
         fields = (
             'id', 'username', 'email', 'first_name', 'last_name',
             'full_name', 'avatar', 'bio', 'created_at', 'updated_at',
-            'posts_count', 'comments_count'
-        )
+            'posts_count', 'comments_count')
         read_only_fields = ('id', 'created_at', 'updated_at')
 
     def get_posts_count(self, obj):
-        return obj.posts.count()
+        """Безопасное получение количества постов"""
+        try:
+            return obj.posts.count()
+        except AttributeError:
+            # Если атрибут posts не существует, возвращаем 0
+            return 0
 
     def get_comments_count(self, obj):
-        return obj.comments.count()
+        """Безопасное получение количества комментариев"""
+        try:
+            return obj.comments.count()
+        except AttributeError:
+            # Если атрибут comments не существует, возвращаем 0
+            return 0
 
 
 class UserUpdateSerializer(serializers.ModelSerializer):
@@ -113,3 +122,5 @@ class ChangePasswordSerializer(serializers.Serializer):
         user.set_password(self.validated_data['new_password'])
         user.save()
         return user
+
+
