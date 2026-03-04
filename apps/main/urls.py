@@ -11,8 +11,8 @@ urlpatterns = [
     path('my-posts/', views.MyPostsView.as_view(), name='my-posts'),
     path('popular/', views.popular_posts, name='popular-posts'),
     path('pinned/', views.pinned_posts_only, name='pinned-posts-only'),
-    path('futured/', views.featured_posts, name='futured-posts'),
+    path('featured/', views.featured_posts, name='featured-posts'),
     path('resent/', views.recent_posts, name='resent-posts'),
-    path('<slug:slug>/', views.PostDetailView.as_view(), name='post-detail'),
+    path('<slug:slug>/', views.PostDetailView.as_view(), name='post-detail')
 
 ]
