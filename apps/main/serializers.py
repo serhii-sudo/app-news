@@ -12,7 +12,7 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'slug', 'description', 'post_count', 'created_at']
         read_only_fields = ['slug', 'created_at']
 
-    def get_posts_count(self, obj):
+    def get_post_count(self, obj):
         return obj.posts.filter(status='published').count()
 
     def create(self, validated_data):
