@@ -26,9 +26,9 @@ class PostListSerializer(serializers.ModelSerializer):
     comments_count = serializers.ReadOnlyField()
 
     class Meta:
-        models = Post
+        model = Post
         fields = [
-            'id', 'title', 'slug', 'content', 'image', 'category',
+            'id', 'title', 'slug', 'content', 'img', 'category',
             'author', 'status', 'created_at', 'updated_at',
             'views_count', 'comments_count'
         ]
