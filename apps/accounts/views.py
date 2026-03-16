@@ -146,23 +146,29 @@ class ChangePasswordView(generics.UpdateAPIView):
 
 
 @api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
 def logout_view(request):
-    @permission_classes([permissions.IsAuthenticated])
-    # Вложенный декоратор — доступ только авторизованным (проверяется access-токен).
-    def inner_function(*args, **kwargs):
-        try:
-            refresh_token = request.data.get('refresh_token')
-            # Клиент должен прислать refresh-токен в теле запроса (обычно в JSON: {"refresh_token": "..."})
+    """Выход пользователя"""
+    # Функция для логаута через черный список refresh-токена.
 
-            if refresh_token:
-                token = RefreshToken(refresh_token)
-                # Создаём объект RefreshToken из строки.
+    try:
+        refresh_token = request.data.get('refresh_token')
+        # Клиент должен прислать refresh-токен в теле запроса (обычно в JSON: {"refresh_token": "..."}).
 
-                token.blacklist()
-                # Добавляем токен в черный список (в базе появится запись в BlacklistedToken).
-                # После этого этот refresh-токен и все последующие access-токены от него станут недействительными.
+        if refresh_token:
+            token = RefreshToken(refresh_token)
+            # Создаём объект RefreshToken из строки.
 
-            return Response({'message': 'Logout successful'}, status=status.HTTP_200_OK)
+            token.blacklist()
+            # Добавляем токен в черный список (в базе появится запись в BlacklistedToken).
+            # После этого этот refresh-токен и все последующие access-токены от него станут недействительными.
 
-        except Exception as e:
-            return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({
+            'message': 'Logout successful'
+        }, status=status.HTTP_200_OK)
+
+    except Exception:
+        # Если токен уже в черном списке или некорректный — ловим исключение.
+        return Response({
+            'error': 'Invalid token'
+        }, status=status.HTTP_400_BAD_REQUEST)
