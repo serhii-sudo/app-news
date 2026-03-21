@@ -1,8 +1,6 @@
 from django.conf import settings
 from django.db import models
-from django.db.models import Case, When, Value, BooleanField
 from django.urls import reverse
-from django.utils import timezone
 from slugify import slugify
 
 

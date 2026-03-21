@@ -1,4 +1,4 @@
-from django.utils.text import slugify
+from slugify import slugify
 from rest_framework import serializers
 
 from apps.main.models import Category, Post
@@ -50,7 +50,7 @@ class PostDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = [
-            'id', 'title', 'slug', 'content', 'image', 'category',
+            'id', 'title', 'slug', 'content', 'img', 'category',
             'category_info', 'author', 'author_info', 'status',
             'created_at', 'updated_at', 'views_count', 'comments_count'
         ]
@@ -65,7 +65,7 @@ class PostDetailSerializer(serializers.ModelSerializer):
             'avatar': author.avatar.url if author.avatar else None
         }
 
-    def category_info(self, obj):
+    def get_category_info(self, obj):
         if obj.category:
             return {
                 'id': obj.category.id,

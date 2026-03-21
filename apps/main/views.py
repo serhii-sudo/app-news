@@ -5,10 +5,6 @@ from rest_framework import generics, permissions, filters
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 
-from django.db.models import Case, When, Value, DateTimeField, BooleanField
-from django.utils import timezone
-from datetime import timedelta
-
 from apps.main.models import Category, Post
 from apps.main.permissions import IsAuthorOrReadOnly
 from apps.main.serializers import CategorySerializer, PostListSerializer, PostCreateUpdateSerializer, \
